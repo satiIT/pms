@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 TextEditingController fName = TextEditingController();
 TextEditingController sName = TextEditingController();
@@ -8,9 +10,26 @@ TextEditingController phone = TextEditingController();
 TextEditingController height = TextEditingController();
 TextEditingController weight = TextEditingController();
 TextEditingController bloodType = TextEditingController();
+CollectionReference users = FirebaseFirestore.instance.collection('users');
 
 class newre extends StatelessWidget {
   const newre({Key? key}) : super(key: key);
+  Future<void> addUser() {
+    // Call the user's CollectionReference to add a new user
+    return users
+        .add({
+          'firstName': fName.text,
+          'secondName': sName.text,
+          'thirdName': tName.text,
+          'idNumber': id.text,
+          'height': height.text,
+          'weight': weight.text,
+          'bloodType': bloodType.text,
+          'birthDate': '2011/5/1',
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +192,9 @@ class newre extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            addUser();
+          },
           tooltip: 'Increment',
           child: const Icon(Icons.add),
         ));
